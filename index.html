@@ -601,6 +601,175 @@
             color: var(--color-text-secondary);
         }
 
+        /* Profile Page */
+        .profile-header {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(253, 186, 116, 0.1));
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border: 1px solid var(--color-accent-light);
+        }
+
+        .profile-cover {
+            display: flex;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-bio {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .profile-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .achievement-badge {
+            background-color: var(--color-bg-secondary);
+            border: 2px solid var(--color-bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .achievement-badge:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.5;
+            background-color: var(--color-bg-tertiary);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .achievement-progress {
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Auth Forms */
+        .auth-form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--color-bg-tertiary);
+            border-radius: var(--border-radius);
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+
+        .auth-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .auth-link a {
+            color: var(--color-primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .navbar {
@@ -672,14 +841,19 @@
             <li><a onclick="switchSection('diary')" class="nav-link">Дневник</a></li>
             <li><a onclick="switchSection('mood')" class="nav-link">Настроение</a></li>
             <li><a onclick="switchSection('leaderboard')" class="nav-link">Рейтинг</a></li>
+            <li><a onclick="switchSection('achievements')" class="nav-link">Достижения</a></li>
             <li><a onclick="switchSection('notifications')" class="nav-link">Уведомления</a></li>
         </ul>
-        <div class="user-profile">
+        <div class="user-profile" id="user-profile-main">
             <div class="user-avatar">А</div>
             <div class="user-info">
                 <div class="user-name">Александр</div>
                 <div class="user-rank">Капитан · 12 дней</div>
             </div>
+        </div>
+        <div id="auth-buttons" style="display: none;">
+            <button class="btn btn-primary" onclick="openModal('login-modal')" style="margin-right: 0.5rem;">Вход</button>
+            <button class="btn btn-secondary" onclick="openModal('register-modal')">Регистрация</button>
         </div>
     </nav>
 
@@ -941,6 +1115,89 @@
             </div>
         </section>
 
+        <!-- Achievements -->
+        <section id="achievements" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Ваши достижения</h2>
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Статистика достижений</h3>
+                <div style="display: flex; gap: 2rem;">
+                    <div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-primary);">12</div>
+                        <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Получено</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-text-secondary);">18</div>
+                        <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Доступно</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-success);">67%</div>
+                        <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Прогресс</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Открытые достижения</h3>
+            <div class="achievements-grid">
+                <div class="achievement-badge">
+                    <div class="achievement-icon">🌟</div>
+                    <div class="achievement-name">Первый шаг</div>
+                    <div class="achievement-desc">Создайте первую запись</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-name">Огненный стрик</div>
+                    <div class="achievement-desc">7 дней подряд</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">💬</div>
+                    <div class="achievement-name">Голос сообщества</div>
+                    <div class="achievement-desc">10 комментариев</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">📝</div>
+                    <div class="achievement-name">Летописец</div>
+                    <div class="achievement-desc">50 записей в дневник</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">🏆</div>
+                    <div class="achievement-name">Капитан</div>
+                    <div class="achievement-desc">Достигните ранга Капитан</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">❤️</div>
+                    <div class="achievement-name">Любимец</div>
+                    <div class="achievement-desc">Получите 50 лайков</div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Заблокированные достижения</h3>
+            <div class="achievements-grid">
+                <div class="achievement-badge locked">
+                    <div class="achievement-icon">⭐</div>
+                    <div class="achievement-name">Маршал</div>
+                    <div class="achievement-desc">1000+ дней</div>
+                    <div class="achievement-progress">938 дней осталось</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="achievement-icon">🎯</div>
+                    <div class="achievement-name">Мастер медитации</div>
+                    <div class="achievement-desc">100 дней подряд</div>
+                    <div class="achievement-progress">88 дней осталось</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="achievement-icon">🌍</div>
+                    <div class="achievement-name">Влиятельный</div>
+                    <div class="achievement-desc">100 подписчиков</div>
+                    <div class="achievement-progress">92 подписчика осталось</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="achievement-icon">💎</div>
+                    <div class="achievement-name">Легенда</div>
+                    <div class="achievement-desc">Все достижения разблокированы</div>
+                </div>
+            </div>
+        </section>
+
         <!-- Notifications -->
         <section id="notifications" class="section">
             <h2 style="margin-bottom: 1.5rem;">Уведомления</h2>
@@ -1025,6 +1282,110 @@
             </div>
 
             <button class="btn btn-primary btn-full" onclick="saveThread()">Создать</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Мой профиль</h3>
+                <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+            </div>
+            
+            <div class="profile-header">
+                <div class="profile-cover">
+                    <div class="profile-avatar-large" id="profile-avatar-large">А</div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="profile-name-large">Александр</div>
+                        <div class="profile-bio">Стремлюсь к личностному развитию. Занимаюсь спортом, интересуюсь духовным ростом.</div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">12</div>
+                                <div class="profile-stat-label">Стрик</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">34</div>
+                                <div class="profile-stat-label">Записи</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">127</div>
+                                <div class="profile-stat-label">Подписчиков</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="auth-label">О себе</label>
+                <textarea class="auth-input" id="profile-bio" placeholder="Расскажите о себе..." style="min-height: 80px;">Стремлюсь к личностному развитию. Занимаюсь спортом, интересуюсь духовным ростом.</textarea>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="saveProfile()">Сохранить профиль</button>
+            <button class="btn btn-secondary btn-full" style="margin-top: 0.75rem;" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Вход</h3>
+                <button class="modal-close" onclick="closeModal('login-modal')">✕</button>
+            </div>
+            
+            <div class="auth-form-group">
+                <label class="auth-label">Email или имя пользователя</label>
+                <input type="text" class="auth-input" id="login-username" placeholder="Ваш email или никнейм">
+            </div>
+
+            <div class="auth-form-group">
+                <label class="auth-label">Пароль</label>
+                <input type="password" class="auth-input" id="login-password" placeholder="Пароль">
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="login()">Войти</button>
+
+            <div class="auth-link">
+                Нет аккаунта? <a onclick="switchAuthModal('login-modal', 'register-modal')">Регистрация</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Регистрация</h3>
+                <button class="modal-close" onclick="closeModal('register-modal')">✕</button>
+            </div>
+            
+            <div class="auth-form-group">
+                <label class="auth-label">Имя пользователя</label>
+                <input type="text" class="auth-input" id="register-username" placeholder="Ваше имя">
+            </div>
+
+            <div class="auth-form-group">
+                <label class="auth-label">Email</label>
+                <input type="email" class="auth-input" id="register-email" placeholder="Ваш email">
+            </div>
+
+            <div class="auth-form-group">
+                <label class="auth-label">Пароль</label>
+                <input type="password" class="auth-input" id="register-password" placeholder="Минимум 6 символов">
+            </div>
+
+            <div class="auth-form-group">
+                <label class="auth-label">Подтвердите пароль</label>
+                <input type="password" class="auth-input" id="register-password-confirm" placeholder="Повторите пароль">
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="register()">Создать аккаунт</button>
+
+            <div class="auth-link">
+                Уже есть аккаунт? <a onclick="switchAuthModal('register-modal', 'login-modal')">Вход</a>
+            </div>
         </div>
     </div>
 
@@ -1151,6 +1512,122 @@
                 e.target.classList.remove('active');
             }
         });
+
+        // Authentication
+        let isLoggedIn = true;
+        const users = {};
+
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-password-confirm').value;
+
+            if (!username.trim() || !email.trim() || !password) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Пароль должен быть минимум 6 символов');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают');
+                return;
+            }
+
+            if (users[username]) {
+                alert('Пользователь с таким именем уже существует');
+                return;
+            }
+
+            users[username] = {
+                email: email,
+                password: password,
+                name: username,
+                rank: 'Новобранец',
+                streak: 0,
+                avatar: username.charAt(0).toUpperCase()
+            };
+
+            appState.user = users[username];
+            isLoggedIn = true;
+            alert('✅ Добро пожаловать, ' + username + '!');
+            updateAuthUI();
+            closeModal('register-modal');
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-password-confirm').value = '';
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!username.trim() || !password) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            if (!users[username] || users[username].password !== password) {
+                alert('Неверное имя пользователя или пароль');
+                return;
+            }
+
+            appState.user = users[username];
+            isLoggedIn = true;
+            alert('✅ Добро пожаловать, ' + username + '!');
+            updateAuthUI();
+            closeModal('login-modal');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            appState.user = null;
+            updateAuthUI();
+            closeModal('profile-modal');
+            alert('До свидания!');
+        }
+
+        function updateAuthUI() {
+            const profileMain = document.getElementById('user-profile-main');
+            const authButtons = document.getElementById('auth-buttons');
+
+            if (isLoggedIn && appState.user) {
+                profileMain.style.display = 'flex';
+                authButtons.style.display = 'none';
+                profileMain.querySelector('.user-avatar').textContent = appState.user.avatar;
+                profileMain.querySelector('.user-name').textContent = appState.user.name;
+                profileMain.querySelector('.user-rank').textContent = appState.user.rank + ' · ' + appState.user.streak + ' дней';
+                profileMain.style.cursor = 'pointer';
+                profileMain.onclick = () => openModal('profile-modal');
+            } else {
+                profileMain.style.display = 'none';
+                authButtons.style.display = 'flex';
+            }
+        }
+
+        function saveProfile() {
+            const bio = document.getElementById('profile-bio').value;
+            if (appState.user) {
+                appState.user.bio = bio;
+                alert('✅ Профиль сохранён!');
+                closeModal('profile-modal');
+            }
+        }
+
+        function switchAuthModal(closeId, openId) {
+            closeModal(closeId);
+            openModal(openId);
+        }
+
+        // Initialize
+        updateAuthUI();
     </script>
 </body>
 </html>
